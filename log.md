@@ -23,11 +23,21 @@ Document Package  Ctrl+Shift+D        Cmd+Shift+D
 git remote -v
 # save the current edit with all of the history
 git add .
-git commit -m 'first commit after fork'
+git commit -m '2nd commit after fork'
 git branch -M main # this will rename branch 'master' to branch 'main'
 # add a remote repos
 git remote add dev https://github.com/thehung92/mosaic_dev.git
 git push -u dev main # this will push branch main to dev remote
+
+#### unstage a file ####
+# unstage 1 file
+git reset HEAD -- mosaic.Rproj
+# unstage all file
+git reset
+
+#### remove a file from cached ####
+# also remove file in previous commit
+git rm --cached -r $dirname
 
 ```
 
