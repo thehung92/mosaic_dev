@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // cppbackward
 void cppbackward(int k, int NUMA, int maxdonors, bool THIN, int NUMP, int L, int gl, int gu, int G, NumericVector transitions, List UMATCH, int max_umatch_size, List dw, List tw, IntegerVector gobs, NumericVector mutmat, int maxmiss, IntegerVector label, IntegerVector kndonors, IntegerVector donates, IntegerVector donatesr, IntegerVector flips, NumericVector backs, NumericVector scalefactor);
 RcppExport SEXP _MOSAIC_cppbackward(SEXP kSEXP, SEXP NUMASEXP, SEXP maxdonorsSEXP, SEXP THINSEXP, SEXP NUMPSEXP, SEXP LSEXP, SEXP glSEXP, SEXP guSEXP, SEXP GSEXP, SEXP transitionsSEXP, SEXP UMATCHSEXP, SEXP max_umatch_sizeSEXP, SEXP dwSEXP, SEXP twSEXP, SEXP gobsSEXP, SEXP mutmatSEXP, SEXP maxmissSEXP, SEXP labelSEXP, SEXP kndonorsSEXP, SEXP donatesSEXP, SEXP donatesrSEXP, SEXP flipsSEXP, SEXP backsSEXP, SEXP scalefactorSEXP) {

@@ -4,3 +4,5 @@
 ^MOSAIC_RESULTS$
 ^MOSAIC_PLOTS$
 ^FREQS$
+^.*\.Rproj$
+^\.Rproj\.user$
