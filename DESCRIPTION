@@ -18,3 +18,5 @@ LinkingTo: Rcpp
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
+RoxygenNote: 7.2.3
+Encoding: UTF-8

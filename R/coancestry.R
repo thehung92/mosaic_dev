@@ -176,7 +176,7 @@ r_create_coancs<-function(t.localanc, gap, MODE="DIP", min.cM=0, max.cM=50,gby=5
   relprobs[is.na(relprobs)]=1 # remove uninformative ones
   list(relprobs=relprobs,ancprobs=ancprobs,drange=drange)
 }
-create_coancs<-cmpfun(r_create_coancs,list(optimize=3))
+create_coancs <- compiler::cmpfun(r_create_coancs,list(optimize=3))
 #create_coancs<-r_create_coancs
 
 plot_coanccurves<-function(coancs,gap,lwd=2,cexa=2,k=NULL,popnames=NULL,PLOT=TRUE,targetname=NULL,dd=NULL,min.cM=1,max.cM=NULL,ylab="relative prob.",

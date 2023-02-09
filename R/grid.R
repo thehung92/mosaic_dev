@@ -85,5 +85,5 @@ r_create_umatch=function(ch.d.w,ch.t.w,g.map,t.G)
   }
   ans=sapply(1:t.G, function(g) create_umatch_g(g,ch.d.w,ch.t.w,g.map))
 }
-create_umatch=cmpfun(r_create_umatch,list(optimize=3))
+create_umatch=compiler::cmpfun(r_create_umatch,list(optimize=3))
 

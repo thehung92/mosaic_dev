@@ -19,6 +19,29 @@ happlot<-function(ch,k,x,A,probs,ylab,mlab=paste("Haplotype", k),xlab="",cexa=1,
   }
   axis(2)
 }
+#' Plot local ancestry for a specific chromosome
+#' 
+#' plot a whole chromosome of 1 individual
+#'
+#' @param ch 
+#' @param ind 
+#' @param x 
+#' @param A 
+#' @param probs 
+#' @param ylab 
+#' @param mlab 
+#' @param xlab 
+#' @param cexa 
+#' @param colvec 
+#'
+#' @return base R graphic device
+#' @export
+#'
+#' @examples
+#' chr=1
+#' ind=2
+#' dipplot(chr,ind,g.loc[[chr]],ind,localanc,xlab=paste("Position on Chromosome",chrnos[chr]),ylab="") mp=axTicks(1,axp=round(c(min(g.loc[[chr]]),max(g.loc[[chr]]),5)))
+#' axis(1,at=mp,labels=signif(mp,3))
 dipplot<-function(ch,ind,x,A,probs,ylab,mlab=paste("Individual",ind),xlab="",cexa=1,
 		  colvec=c("#E69F00", "#56B4E9", "#009E73", "#CC79A7", "#D55E00", "#F0E442", "#0072B2", "#999999")) { 
   par(mar=c(4, 1.5*cexa+2, cexa, 0), cex.main=cexa, cex.axis=cexa, cex.lab=cexa)

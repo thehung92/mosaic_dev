@@ -40,7 +40,7 @@ r.create.proposal<-function(t.ch,t.G,t.A,t.NUMP,t.max.donors,t.fors,t.sumfors,t.
   ll[is.nan(ll)|is.infinite(ll)]=-1 # can happen if no path through
   ll
 }
-create.proposal<-cmpfun(r.create.proposal,list(optimize=3)) # 
+create.proposal<-compiler::cmpfun(r.create.proposal,list(optimize=3)) # 
 #create.proposal<-r.create.proposal
 # H1 gets: fors[1] to g, backs[2] from g and new fors from g, new backs to g
 # H2 gets: fors[2] to g, backs[1] from g and new fors from g, new backs to g
@@ -168,7 +168,7 @@ r_phase_hunt<-function(t.eps.lower, t.ch, t.G, t.A, t.GpcM, t.ind, t.flips, verb
   return(list(ind.max.ll=ind.max.ll,ind.orig.ll=ind.orig.ll,ind.max.flips=t.flips,nflips=t.nflips,niters=iters))
 }
 
-#phase_hunt<-cmpfun(r_phase_hunt,list(optimize=3)) # 
+#phase_hunt<-compiler::cmpfun(r_phase_hunt,list(optimize=3)) # 
 phase_hunt<-r_phase_hunt
 r_phase_mcmc<-function(t.ch, t.G, t.A, t.ind, M, t.NUMP, t.NUMA, t.kLL, t.max.donors, t.initProb, t.label, t.flips, verbose, t.ndonors, t.donates, t.donatesl, t.donatesr, 
 		       t.transitions, t.umatch, t.maxmatchsize, t.dw, t.tw, t.gobs, t.mutmat, t.maxmiss, mcmcprog, mcmchill=TRUE) 
@@ -262,7 +262,7 @@ r_phase_mcmc<-function(t.ch, t.G, t.A, t.ind, M, t.NUMP, t.NUMA, t.kLL, t.max.do
     cat(100*mean(ind.mcmc.acc), "% accepted: log-likelihood ", ind.orig.ll, " -> ", ind.max.ll, " on Chr ", chrnos[t.ch], " for ind ", t.ind, "\n", sep="")
   return(list(ind.max.flips=ind.max.flips,ind.mcmc.ll=ind.mcmc.ll,ind.max.ll=ind.max.ll,ind.mcmc.acc=ind.mcmc.acc))
 }
-#phase_mcmc<-cmpfun(r_phase_mcmc,list(optimize=3)) # 
+#phase_mcmc<-compiler::cmpfun(r_phase_mcmc,list(optimize=3)) # 
 phase_mcmc<-r_phase_mcmc
 
 

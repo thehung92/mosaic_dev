@@ -23,8 +23,8 @@ r_calc_freqs=function(s,t.A,t.populations,t.y)
   return(list(p,n)) # returns two vectors of length t.A; freq and number
 }
 
-wc_ests=cmpfun(r_wc_ests,list(optimize=3))
-calc_freqs=cmpfun(r_calc_freqs,list(optimize=3))
+wc_ests=compiler::cmpfun(r_wc_ests,list(optimize=3))
+calc_freqs=compiler::cmpfun(r_calc_freqs,list(optimize=3))
 which.max.thresh=function(x,thresh) {ans=which.max(x); if (x[ans]<thresh) ans=NaN; ans}
 r_maximal_alleles=function(t.target,chrnos,glocs,t.localanc,pathin1,pathin2,thresh=0.8) # assign each hap locally to an anc and return "ancestral" haps
 {
@@ -59,7 +59,7 @@ r_maximal_alleles=function(t.target,chrnos,glocs,t.localanc,pathin1,pathin2,thre
   }
   return(list("freqs"=allp,"counts"=alln))
 }
-maximal_alleles=cmpfun(r_maximal_alleles,list(optimize=3))
+maximal_alleles=compiler::cmpfun(r_maximal_alleles,list(optimize=3))
 
 r_wc_fst=function(freqs1,counts1,freqs2,counts2) 
 {
@@ -102,8 +102,8 @@ v_wc_fst=function(freqs1,counts1,freqs2,counts2)
   return((1-sum(Hs,na.rm=TRUE)/sum(Ht,na.rm=TRUE)))
 }
 
-#wc_fst=cmpfun(r_wc_fst,list(optimize=3))
-wc_fst=cmpfun(v_wc_fst,list(optimize=3)) # gives the same as the above
+#wc_fst=compiler::cmpfun(r_wc_fst,list(optimize=3))
+wc_fst=compiler::cmpfun(v_wc_fst,list(optimize=3)) # gives the same as the above
 
 R_Fst=function(x) 
 { # difference quotient of Fst i.e. (p-q)^2/(0.5*(p+q))
