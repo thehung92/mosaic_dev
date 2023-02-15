@@ -1,6 +1,25 @@
 # various functions that create useful plots of MOSAIC model fit
 # such as local ancestry plots, plots of the inferred copying matrix, tables of top donors in selected regions, etc
 
+#' Title
+#'
+#' @param ch 
+#' @param k 
+#' @param x 
+#' @param A 
+#' @param probs 
+#' @param ylab 
+#' @param mlab 
+#' @param xlab 
+#' @param cexa 
+#' @param colvec 
+#'
+#' @return a base R graphic
+#' @export
+#'
+#' @examples
+#' none yet
+#' @noRd
 happlot<-function(ch,k,x,A,probs,ylab,mlab=paste("Haplotype", k),xlab="",cexa=1,
 		  colvec=c("#E69F00", "#56B4E9", "#009E73", "#CC79A7", "#D55E00", "#F0E442", "#0072B2", "#999999")) { 
   # probs is A*K*length(x) in dimension

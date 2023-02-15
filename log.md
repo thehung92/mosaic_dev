@@ -60,3 +60,15 @@ Place cursor in the function
 
 - from the menu: code > insert roxygen skeleton
 - resolve bugs by replacing `compiler::cmpfun` with `cmpfun`
+
+## add package description
+
+use the `usethis` package to automatically add description `usethis::use_package_doc()`
+
+## move example data to `inst/extdata` and add description
+
+```shell
+for file in `ls ../example_data/*`; do
+  gzip -c $file > inst/extdata/`basename $file`.gz
+done
+```

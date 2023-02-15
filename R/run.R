@@ -1,4 +1,52 @@
-run_mosaic=function(target,datasource,chrnos,A,NUMI,pops=NULL,mask=NULL,PLOT=TRUE,doFst=TRUE,PHASE=TRUE,gens=NULL,ratios=NULL,EM=TRUE, 
+#' run MOSAIC analysis; reads in data and performs full inferential algorithm to estimate parameters and local ancestry.
+#' 
+#' calls all other MOSAIC functions to read in data, compress, perform inference, and output results. 
+#'
+#' @param target a string giving the name of admixed target population.
+#' @param datasource a string giving the path to folder where inputs are stored.
+#' @param chrnos vector of integers giving the chromosomes to use.
+#' @param A integer greater than or equal to 2 giving the number of ancestries to model.
+#' @param NUMI integer giving the number of admixed samples to use.
+#' @param pops vector of strings giving names of populations; first A are used to simulate admixture if target="simulated" is used. Defaults to NULL so that all available populations are used as donor populations when target is not simulated.
+#' @param mask vector of strings giving names of populations not to use. Defaults to NULL so that no populations are dropped from the analysis. 
+#' @param PLOT logical specifying whether MOSAIC should save default plots to summarise results in folder MOSAIC_PLOTS/.
+#' @param doFst logical to set whether or not to calculate Fst between each pair of ancestries (using estimated local ancestry). Defaults to TRUE and run times are sped up by using FALSE. 
+#' @param PHASE logical specifying whether to rephase targets or not. Defaults to TRUE. 
+#' @param gens integer number of generations ago from which to simulate admixture (if target is simulated). 
+#' @param ratios vector of proportions; when simulating data (if target is simulated), what vector of proportions should be used for the ancestries? Default NULL causes MOSAIC to choose a random vector that is close to equal proportions of 1/A. 
+#' @param EM logical to set whether or not to perform EM inference on model parameters. Defaults to TRUE. 
+#' @param ffpath string path to where temporary read / write files are stored. Default is "/dev/shm"
+#' @param MC integer number of CPU cores to hog for the MOSAIC inference. Defaults to use half of all available cores. 
+#' @param return.res logical to set whether a list containing all inferred parameters, local ancestry estimates, Fst values, is returned. Defaults to TRUE. 
+#' @param REPS integer number of rounds of thin + phase + EM
+#' @param GpcM integer granularity of genetic distance grid as number of gridpoints per centiMorgan. Defaults to 60. 
+#' @param nl integer maximum number of individuals to use from each reference population. Defaults to 1000 and where this is larger than the number of individuals in a population all are used. 
+#' @param max.donors integer specifying the maximum number of top ranked most useful haplotypes to consider copying from for each target individual at each gridpoint. Defaults to 100. The ranked top 100 are found in the thinning part of the algorithm and this leads to a large speedup in fitting the two-layer HMM with a very small decrease in accuracy of local ancestry estimation. 
+#' @param prop.don proportion specifying the maximum cumulative probability of copying from for each target individual at each gridpoint. Defaults to 0.99. Top ranked max.donors or until copying cumulative probability from top down reaches prop.don are considered at each gridpoint. 
+#' @param doMu logical specifying whether to update the copying matrix Mu parameters. Defaults to TRUE but can be turned off to force MOSAIC to fit a particular version of a model e.g. using parameters learnt previously. 
+#' @param doPI logical specifying whether to update the ancestry transition matrix parameters in the HMM. Defaults to TRUE but can be turned off to force MOSAIC to fit a particular version of a model. 
+#' @param dorho logical specifying whether to update the recombination rate within an ancestry parameter in the HMM. Defaults to TRUE but can be turned off to force MOSAIC to fit a particular version of a model. 
+#' @param dotheta logical specifying whether to update the miscopying rate (due to mutation + error) parameter (or emission probability in the HMM). Defaults to TRUE but can be turned off to force MOSAIC to fit a particular version of a model. 
+#' @param firstind integer index of first target individual to analyse from the input dataset. Use with NUMI to analyses batches of individuals or do them one at a time. Defaults to 1. 
+#' @param verbose logical specifying whether to print algorithm updates to screen during the inferential routine. Defaults to TRUE. 
+#' @param Ne integer specifying effective population size for the species. Only usage is in estimating initial value of theta above which will be re-estimated by default as part of the algorithm. 
+#' @param MODE either "DIP" or "HAP" to run coancestry curve estimation on diploid or haploid genomes. Note that if "HAP" then PHASE should be FALSE. Defaults to "DIP".
+#' @param singlePI should MOSAIC be constrained to assume that all admixed genomes experienced the same admixture event (timings and proportions)? Defaults to FALSE. 
+#' @param init.rho User specified values for recombination rate within latent ancestry. Could be output from previous MOSAIC run. 
+#' @param init.theta User specified values for error / mutation rate within latent ancestry. Could be output from previous MOSAIC run. 
+#' @param init.Mu User specified values for copying rates from panels within each ancestry. Could be output from previous MOSAIC run. 
+#' @param init.PI User specified values for switching rates between ancestries. Could be output from previous MOSAIC run. Note this overrides ratios and gens values. 
+#' @param commonrho Should the same recombination rate apply within each ancestry. Defaults to TRUE. 
+#' @param commontheta Should the same mutation / error rate apply within each ancestry. Defaults to TRUE. 
+#'
+#' @return a list containing all inferred parameters, local ancestry estimates, Fst values
+#' @export
+#'
+#' @examples
+#' require(MOSAIC)
+#' set.seed(123)
+#' mosaic.result=run_mosaic("simulated","../example_data/",chrnos=18:22,A=2,NUMI=3, pops=c("English","Mandenka"), gens=30)
+run_mosaic <- function(target,datasource,chrnos,A,NUMI,pops=NULL,mask=NULL,PLOT=TRUE,doFst=TRUE,PHASE=TRUE,gens=NULL,ratios=NULL,EM=TRUE, 
 		    ffpath=tempdir(),MC=0,return.res=TRUE,REPS=0,GpcM=60,nl=1000,max.donors=100,prop.don=0.99,
 		    doMu=TRUE,doPI=TRUE,dorho=TRUE,dotheta=TRUE,firstind=1,verbose=TRUE,Ne=9e4,MODE="DIP",singlePI=FALSE, 
 		    init.rho=NULL, init.theta=NULL, init.Mu=NULL, init.PI=NULL, commonrho=TRUE, commontheta=TRUE) {

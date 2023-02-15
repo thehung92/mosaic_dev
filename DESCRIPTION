@@ -5,6 +5,7 @@ Version: 1.4
 Date: 2021-11-09
 Author: Michael Salter-Townshend
 Maintainer: Michael Salter-Townshend <michael.salter-townshend@ucd.ie>
+Contributor: Hung Tran The Nguyen
 Description: MOSAIC is a package for inferring ancestry segments and characterizing admixture events from dense genotype data. 
              Admixture involves a number of genetically differentiated groups coming together; MOSAIC jointly infers the demographic 
 	     history of the samples and properties of the admixing groups. The algorithm employs nested hidden Markov models to obtain 
